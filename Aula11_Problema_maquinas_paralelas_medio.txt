@@ -1,0 +1,95 @@
+------------------------------------------------------------
+ PROBLEMA DE MÁQUINAS PARALELAS – INSTÂNCIA COM MÁQUINAS NÃO IDÊNTICAS
+------------------------------------------------------------
+
+DESCRIÇÃO DO PROBLEMA:
+Neste problema, temos 40 tarefas e 6 máquinas com diferentes capacidades de processamento.
+As máquinas possuem capacidades distintas e, portanto, não são idênticas.
+Cada tarefa deve ser atribuída a uma máquina de forma que o makespan (tempo total de execução)
+seja minimizado, considerando as diferentes capacidades das máquinas.
+
+------------------------------------------------------------
+DADOS DO PROBLEMA:
+
+Número de tarefas: 40
+Número de máquinas: 6
+Tipo de máquinas: Não Idênticas (máquinas com capacidades diferentes)
+Objetivo: Minimizar o makespan (tempo total de execução)
+
+------------------------------------------------------------
+FUNÇÃO OBJETIVO:
+
+Minimizar C_max
+
+Onde:
+- C_max é o tempo da máquina que terminar por último
+- Cada tarefa deve ser alocada a exatamente uma máquina
+- Todas as máquinas podem executar qualquer tarefa, mas com diferentes capacidades
+
+------------------------------------------------------------
+TABELA DE CAPACIDADES DAS MÁQUINAS:
+
+Máquina   Capacidade de Processamento
+1         18
+2         22
+3         25
+4         16
+5         28
+6         14
+
+------------------------------------------------------------
+TABELA DE TAREFAS (tempo de processamento em unidades de tempo):
+
+ID_Tarefa   Tempo_Processamento
+1           17
+2           9
+3           20
+4           12
+5           28
+6           16
+7           22
+8           15
+9           18
+10          22
+11          19
+12          23
+13          11
+14          27
+15          14
+16          21
+17          17
+18          24
+19          26
+20          15
+21          13
+22          10
+23          15
+24          16
+25          22
+26          18
+27          21
+28          20
+29          23
+30          17
+31          23
+32          20
+33          22
+34          16
+35          18
+36          12
+37          26
+38          14
+39          20
+40          11
+
+------------------------------------------------------------
+INSTRUÇÕES:
+
+- Implementar a metaheurística atribuída ao seu grupo.
+- Considerar as capacidades distintas das máquinas ao alocar as tarefas.
+- Avaliar o makespan (C_max) da solução e otimizá-lo.
+- Ao final, reportar:
+    a) Atribuição final de tarefas às máquinas
+    b) Valor final do makespan
+    c) Tempo de execução do algoritmo
+    d) Gráfico ou análise da evolução da solução, se possível

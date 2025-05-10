@@ -1,0 +1,6 @@
+**/target
+*.zip
+/bin/
+*.odt
+*.ods
+*.zip

@@ -1,0 +1,73 @@
+------------------------------------------------------------
+ PROBLEMA DE MÁQUINAS PARALELAS – INSTÂNCIA DE TESTE
+------------------------------------------------------------
+
+DESCRIÇÃO DO PROBLEMA:
+Dado um conjunto de tarefas independentes e um conjunto de máquinas paralelas idênticas,
+atribua cada tarefa a uma única máquina de modo que o tempo total de conclusão (makespan)
+seja minimizado.
+
+------------------------------------------------------------
+DADOS DO PROBLEMA:
+
+Número de tarefas: 20
+Número de máquinas: 5
+Tipo de máquinas: Idênticas
+Objetivo: Minimizar o makespan (tempo total de execução)
+
+------------------------------------------------------------
+FUNÇÃO OBJETIVO:
+
+Minimizar C_max
+
+Onde:
+- C_max é o tempo da máquina que terminar por último
+- Cada tarefa deve ser alocada a exatamente uma máquina
+- Todas as máquinas podem executar qualquer tarefa
+
+------------------------------------------------------------
+RESTRIÇÕES:
+
+1. Cada tarefa deve ser atribuída a uma e somente uma máquina.
+2. Cada máquina pode processar uma tarefa por vez.
+3. O tempo de execução de uma tarefa é fixo e conhecido.
+4. As máquinas são idênticas em desempenho (tempo de execução é o mesmo em qualquer uma).
+5. Não há preempção (tarefa, uma vez iniciada, deve ser concluída sem interrupção).
+6. Não há dependência entre tarefas (todas são independentes).
+
+------------------------------------------------------------
+TABELA DE TAREFAS (tempo de processamento em unidades de tempo):
+
+ID_Tarefa   Tempo_Processamento
+1           12
+2           5
+3           9
+4           7
+5           4
+6           11
+7           8
+8           6
+9           10
+10          3
+11          7
+12          9
+13          5
+14          6
+15          4
+16          8
+17          12
+18          3
+19          7
+20          10
+
+------------------------------------------------------------
+INSTRUÇÕES:
+
+- Implementar a metaheurística atribuída ao seu grupo
+- Ler os dados de entrada e produzir uma solução que atribua cada tarefa a uma das 5 máquinas.
+- Avaliar o makespan (C_max) da solução e otimizá-lo.
+- Ao final, reportar:
+    a) Atribuição final de tarefas às máquinas
+    b) Valor final do makespan
+    c) Tempo de execução do algoritmo
+    d) Gráfico ou análise da evolução da solução, se possível

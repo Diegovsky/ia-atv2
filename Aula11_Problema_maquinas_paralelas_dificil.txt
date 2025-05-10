@@ -1,0 +1,90 @@
+------------------------------------------------------------
+ PROBLEMA DE MÁQUINAS PARALELAS – INSTÂNCIA COM RESTRIÇÕES ADICIONAIS
+------------------------------------------------------------
+
+DESCRIÇÃO DO PROBLEMA:
+Neste problema, além de 40 tarefas e 5 máquinas idênticas, foram adicionadas algumas restrições:
+1. Não préempenção: as tarefas não podem ser interrompidas uma vez iniciadas.
+2. Algumas tarefas devem ser completadas antes de outras (restrições de prioridade).
+
+------------------------------------------------------------
+DADOS DO PROBLEMA:
+
+Número de tarefas: 40
+Número de máquinas: 5
+Tipo de máquinas: Idênticas
+Objetivo: Minimizar o makespan (tempo total de execução)
+
+------------------------------------------------------------
+FUNÇÃO OBJETIVO:
+
+Minimizar C_max
+
+Onde:
+- C_max é o tempo da máquina que terminar por último
+- Cada tarefa deve ser alocada a exatamente uma máquina
+- Todas as máquinas podem executar qualquer tarefa
+
+------------------------------------------------------------
+TABELA DE TAREFAS (tempo de processamento em unidades de tempo):
+# M1 [  1]
+# M2 [  3 2]
+
+ID_Tarefa   Tempo_Processamento   Tarefas_Prioridade
+1           25                   Dependentes: [2, 3]
+2           17                   Nenhuma
+3           20                   Dependentes: [4, 5]
+4           12                   Nenhuma
+5           28                   Dependentes: [6]
+6           16                   Nenhuma
+7           22                   Nenhuma
+8           15                   Dependentes: [9]
+9           18                   Nenhuma
+10          30                   Dependentes: [11]
+11          19                   Nenhuma
+12          23                   Dependentes: [13]
+13          11                   Nenhuma
+14          27                   Nenhuma
+15          14                   Dependentes: [16]
+16          21                   Nenhuma
+17          17                   Dependentes: [18]
+18          24                   Nenhuma
+19          26                   Dependentes: [20]
+20          19                   Nenhuma
+21          13                   Dependentes: [22]
+22          10                   Nenhuma
+23          15                   Dependentes: [24]
+24          28                   Nenhuma
+25          22                   Dependentes: [26]
+26          18                   Nenhuma
+27          21                   Dependentes: [28]
+28          30                   Nenhuma
+29          23                   Dependentes: [30]
+30          17                   Nenhuma
+31          25                   Dependentes: [32]
+32          20                   Nenhuma
+33          22                   Dependentes: [34]
+34          16                   Nenhuma
+35          18                   Dependentes: [36]
+36          12                   Nenhuma
+37          26                   Dependentes: [38]
+38          14                   Nenhuma
+39          27                   Dependentes: [40]
+40          11                   Nenhuma
+
+Exemplo, a Tarefa 1 tem a seguinte restrição:
+Tarefa 1 → Prioridade sobre Tarefas [2, 3]
+Isso significa que, antes de executar a Tarefa 2 ou a Tarefa 3, a Tarefa 1 precisa ser completada. Ou seja, Tarefas 2 e 3 não podem ser iniciadas até que a Tarefa 1 termine.
+
+------------------------------------------------------------
+INSTRUÇÕES:
+
+- Implementar a metaheurística atribuída ao seu grupo.
+- As tarefas possuem algumas prioridades, ou seja, algumas precisam ser realizadas antes de outras.
+- Garantir que a restrição de não préempenção seja respeitada.
+- Avaliar o makespan da solução e otimizá-lo.
+- Ao final, reportar:
+    a) Atribuição final de tarefas às máquinas
+    b) Valor final do makespan
+    c) Tempo de execução do algoritmo
+    d) Gráfico ou análise da evolução da solução, se possível
