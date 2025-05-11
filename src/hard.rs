@@ -9,43 +9,31 @@ pub struct Params {
     count_mac: usize,
 }
 
-type Machine = u8;
 type ProcessTime = u32;
+type Machine = Vec<ProcessTime>;
 
 #[derive(Debug, Clone)]
 pub struct Solution {
     // Vetor que diz qual máquina cada processo está alocado
-    tasks: Vec<Machine>,
+    machines: Vec<Machine>,
     largest_machine_time: ProcessTime,
 }
 
 impl Solution {
-    fn new(tasks: Vec<Machine>, params: &Params) -> Self {
+    fn new(machines: Vec<Machine>, params: &Params) -> Self {
         let mut this = Self {
-            tasks,
+            machines,
             largest_machine_time: 0,
         };
         this.largest_machine_time = this.largest_machine_time(params);
         return this;
     }
-    fn neighbour_for_task(&self, task: usize, params: &Params) -> Vec<Self> {
-        let now = self.tasks[task];
-        (0..(params.count_mac as Machine))
-            .filter(|mac| *mac != now)
-            .map(|new_mac| {
-                let mut new = self.clone();
-                new.tasks[task] = new_mac;
-                new
-            })
-            .collect_vec()
-    }
 
-    fn time_by_machine(&self, params: &Params) -> Vec<Vec<(usize, ProcessTime)>> {
-        let mut times = vec![Vec::new(); params.count_mac];
-        for (i, mac) in self.tasks.iter().enumerate() {
-            times[*mac as usize].push((i, params.proc_times[i]));
-        }
-        times
+    fn time_by_machine(&self) -> Vec<Vec<(usize, ProcessTime)>> {
+        self.machines
+            .iter()
+            .map(|mac| mac.iter().copied().enumerate().collect())
+            .collect()
     }
     fn largest_machine_time(&self, params: &Params) -> ProcessTime {
         self.time_by_machine(params)

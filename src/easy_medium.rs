@@ -41,23 +41,26 @@ impl Solution {
             .collect_vec()
     }
 
-    fn time_by_machine(&self, params: &Params) -> Vec<Vec<(usize, ProcessTime)>> {
+    fn tasks_by_machine(&self, params: &Params) -> Vec<Vec<usize>> {
         let mut times = vec![Vec::new(); params.count_mac];
         for (i, mac) in self.tasks.iter().enumerate() {
-            times[*mac as usize].push((i, params.proc_times[i]));
+            times[*mac as usize].push(i);
         }
         times
     }
     fn process_time_exceeds(&self, params: &Params) -> bool {
-        self.time_by_machine(params)
+        self.tasks_by_machine(params)
             .into_iter()
             .enumerate()
-            .any(|(i, bar)| bar.iter().any(|(_, num)| *num > params.machine_limits[i]))
+            .any(|(machine, bar)| {
+                bar.into_iter()
+                    .any(|proc| params.proc_times[proc] > params.machine_limits[machine])
+            })
     }
     fn largest_machine_time(&self, params: &Params) -> ProcessTime {
-        self.time_by_machine(params)
+        self.tasks_by_machine(params)
             .into_iter()
-            .map(|bars| bars.into_iter().map(|(_, time)| time).sum())
+            .map(|bars| bars.into_iter().map(|proc| params.proc_times[proc]).sum())
             .max()
             .expect("Nenhuma máquina")
     }
@@ -75,10 +78,21 @@ fn eval_candidate(s: &Solution, s_prime: &Solution) -> ProcessTime {
     s.largest_machine_time - s_prime.largest_machine_time
 }
 
+fn random_valid_machine(params: &Params, process: usize, rand: &mut impl rand::Rng) -> Machine {
+    let macs = (0..params.count_mac)
+        .into_iter()
+        .filter(|mac| params.proc_times[process] <= params.machine_limits[*mac])
+        .map(|mac| mac as Machine)
+        .collect_vec();
+    macs.choose(rand)
+        .copied()
+        .expect("Process can't fit in any machine")
+}
+
 fn random_greedy_solution(params: &Params, a: f64, rand: &mut impl rand::Rng) -> Solution {
-    // solução inicial vazia
-    let tasks = std::iter::from_fn(|| Some(rand.gen_range(0..params.count_mac as Machine)))
-        .take(params.count_procs)
+    let tasks = (0..params.count_procs)
+        .into_iter()
+        .map(|proc| random_valid_machine(params, proc, rand))
         .collect_vec();
     let mut s = Solution::new(tasks, params);
 
@@ -95,7 +109,7 @@ fn random_greedy_solution(params: &Params, a: f64, rand: &mut impl rand::Rng) ->
                 (s_prime, g)
             })
             .collect_vec();
-        lrc.retain(|(solution, _)| !solution.process_time_exceeds(params));
+        lrc.retain(|(solution, _)| solution.process_time_exceeds(params));
         // Nenhum vizinho é válido
         if lrc.is_empty() {
             break;
@@ -122,18 +136,26 @@ fn random_greedy_solution(params: &Params, a: f64, rand: &mut impl rand::Rng) ->
 }
 
 fn greedy_search(s: &mut Solution, params: &Params) {
-    let mut times = s.time_by_machine(params);
+    let mut times = s.tasks_by_machine(params);
     times.retain(|bar| !bar.is_empty());
-    times.sort_by_cached_key(|bar| bar.iter().map(|(_, val)| val).sum::<ProcessTime>());
+    times.sort_by_cached_key(|bar| {
+        bar.iter()
+            .map(|proc| params.proc_times[*proc])
+            .sum::<ProcessTime>()
+    });
     for bar in &mut times {
-        bar.sort_by_cached_key(|(_, time)| *time);
+        bar.sort_by_cached_key(|proc| params.proc_times[*proc]);
     }
-    let menor = &times[0][0];
+
+    // troca o menor e o maior de lugar
+    // não está checando se essa troca é inválida
+    let menor = times[0][0];
     let maior = &times[times.len() - 1];
     let maior = maior[maior.len() - 1];
     let mut tasks2 = s.tasks.clone();
-    tasks2.swap(menor.0, maior.0);
+    tasks2.swap(menor, maior);
     let s_prime = Solution::new(tasks2, params);
+    // se a busca local for melhor que a solução inicial, ela é aceita
     if s_prime.largest_machine_time < s.largest_machine_time {
         *s = s_prime;
         greedy_search(s, params);
@@ -215,7 +237,7 @@ pub fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let pparams = PParams {
         i_max: 0,
-        idle_max: 300,
+        idle_max: 50,
         a: 0.5,
     };
 
@@ -226,9 +248,17 @@ pub fn main() -> Result<(), Box<dyn std::error::Error>> {
         machine_limits: cap_maquinas,
     };
 
-    for _ in 0..10 {
+    for _ in 0..1 {
         let (runtime, solution, _) = run(pparams, &params);
-        println!("[{:?}] {:?}", runtime, solution.largest_machine_time);
+        // println!("[{:?}] {:?}", runtime, solution);
+        for (i, mac) in solution.tasks_by_machine(&params).iter().enumerate() {
+            println!(
+                "M{i}: {:?}",
+                mac.iter()
+                    .map(|proc| params.proc_times[*proc])
+                    .collect_vec()
+            );
+        }
     }
     Ok(())
 }
